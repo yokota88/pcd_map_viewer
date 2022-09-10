@@ -24,7 +24,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 0 }}>
+        <Box component="div" sx={{ p: 0 }}>
           <Typography component="span">{children}</Typography>
         </Box>
       )}
@@ -47,8 +47,8 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Box  component="div" sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
+      <Box  component="div" sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Project" {...a11yProps(0)} />
           <Tab label="Create" {...a11yProps(1)} />
