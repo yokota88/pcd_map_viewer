@@ -1,11 +1,12 @@
 import "./styles.css";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
 import { Stats, OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader";
 import { Suspense } from "react";
 import { useRef } from "react";
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
+import { Mesh, Vector3 } from 'three';
 
 const Model = () => {
     const result = useLoader(PCDLoader, './sample.pcd')
@@ -18,6 +19,13 @@ const Model = () => {
         </Suspense>
       )
 };
+
+const Rig = ({ v = new Vector3() }) => {
+    return useFrame((state) => {
+      console.log(state);
+    })
+  };
+  
 
 export default function PcdCanvas() {
     // const controlRef = useRef();
@@ -36,6 +44,7 @@ export default function PcdCanvas() {
                 }}
                 dpr={window.devicePixelRatio}
 				shadows>
+                <Rig />
                 <OrthographicCamera position={[0, 0, 5]} zoom={170} />
                 <Suspense fallback={null}>
                     {/* Control */}
@@ -43,6 +52,8 @@ export default function PcdCanvas() {
                     
                     {/* PointCloud */}
                     <Model />
+
+                    
                 </Suspense>
                 
                 {/* <Stats /> */}
