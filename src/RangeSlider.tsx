@@ -14,7 +14,7 @@ export default function RangeSlider() {
   };
 
   return (
-    <Box component="div" sx={{ width: 200 }}>
+    <Box component="div" sx={{ width: 300, pl:3}}>
       <Slider
         size="small"
         getAriaLabel={() => 'Temperature range'}
