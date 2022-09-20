@@ -38,7 +38,7 @@ const FileUploadUI = (props) => {
   const asyncEvent = useAsyncCallback(onFileInputChange);
 
   return (
-    <Box　sx={{marginTop: 0, display: 'inline-block'}}>
+    <Box sx={{marginTop: 0, display: 'inline-block'}}>
       <CircularIntegration
         onClick={clickFileUploadButton}
         asyncEvent={asyncEvent}
