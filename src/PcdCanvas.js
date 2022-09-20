@@ -12,7 +12,7 @@ const Model = () => {
     const result = useLoader(PCDLoader, './sample.pcd')
     // return <primitive object={result} />
     result.material.size = 0.15;
-    console.log(result)
+    // console.log(result)
     return (
         <Suspense fallback={null}>
           <primitive object={result} />
@@ -22,7 +22,7 @@ const Model = () => {
 
 const Rig = ({ v = new Vector3() }) => {
     return useFrame((state) => {
-      console.log(state);
+    //   console.log(state);
     })
   };
   

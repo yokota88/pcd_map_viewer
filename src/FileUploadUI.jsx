@@ -27,7 +27,9 @@ const FileUploadUI = (props) => {
 
   const onFileInputChange = async (event) => {
     const file = event.target.files[0]
+    console.log(file)
     await uploadFile(file)
+    console.log('Loaded')
   }
 
   const clickFileUploadButton = () => {
