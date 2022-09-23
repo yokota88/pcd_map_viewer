@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import RangeSlider from './RangeSlider';
-import FileUploadUI from './FileUploadUI';
+import PcdLoadUI from './PcdLoadUI';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,7 +24,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box component="div" sx={{ p: 0 }}>
+        <Box component="div" sx={{ p: 0, height: 50}}>
           <Typography component="span">{children}</Typography>
         </Box>
       )}
@@ -47,7 +47,7 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box  component="div" sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
+    <Box component="div" sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
       <Box  component="div" sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Project" {...a11yProps(0)} />
@@ -56,7 +56,9 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <FileUploadUI name="PCD Map"/>
+        {/* <Box component="div" sx={{height:50}}> */}
+          <PcdLoadUI name="PCD Map"/>
+        {/* </Box>       */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         

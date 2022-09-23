@@ -5,19 +5,19 @@ import CircularIntegration from './CircularIntegration';
 import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
-const initialState = {
-  file: null,
-}
+// const initialState = {
+//   file: null,
+// }
 
-const FileUploadUI = (props) => {
-  const {pcdFilePath, setPcdFilePath} = useContext(PcdFilePropsContext);
+const PcdLoadUI = (props) => {
+  const {pcdData, setPcdData} = useContext(PcdFilePropsContext);
   const inputRef = useRef(null)
-  const [formState, setFormState] = useState(initialState)
+  // const [formState, setFormState] = useState(initialState)
   const [success, setSuccess] = useState(false)
 
   const uploadFile = async(file) => {
     if (!file) return
-    setPcdFilePath(file);
+    setPcdData(file);
 
     /* アップロード処理に見立てた時間のかかる処理 */
     // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -25,7 +25,7 @@ const FileUploadUI = (props) => {
 
     /* アップロード処理が成功したらフォームの状態を
        初期化してsuccessステートをtrueにする */
-    setFormState(initialState)
+    // setFormState(initialState)
     setSuccess(true)
   }
 
@@ -46,7 +46,7 @@ const FileUploadUI = (props) => {
       <CircularIntegration
         onClick={clickFileUploadButton}
         asyncEvent={asyncEvent}
-        success={success}
+        // success={success}
         component="label"
         text={asyncEvent.loading ? '...' : props.name}
       />
@@ -61,4 +61,4 @@ const FileUploadUI = (props) => {
   )
 }
 
-export default FileUploadUI
+export default PcdLoadUI

@@ -4,10 +4,10 @@ export const PcdFilePropsContext = createContext({});
 export const PcdFilePropsProvider = (props) => {
   const { children } = props;
 
-  const [pcdFilePath, setPcdFilePath] = useState('');
+  const [pcdData, setPcdData] = useState('');
 
   return (
-    <PcdFilePropsContext.Provider value={{pcdFilePath, setPcdFilePath}}>
+    <PcdFilePropsContext.Provider value={{pcdData, setPcdData}}>
       {children}
     </PcdFilePropsContext.Provider>
   )

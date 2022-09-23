@@ -9,11 +9,11 @@ import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
 import { Mesh, Vector3, Points } from 'three';
 import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
-import { useLocal } from "./loader";
+import { usePCDLoader } from "./loader";
 
 
 const Model = (props) => {
-    let result = useLocal(props.file_path);
+    let result = usePCDLoader(props.file_path);
     if(result != null){
         result.material.size = 0.15;
     }else{
@@ -57,7 +57,7 @@ export default function PcdCanvas() {
                     <OrbitControls />
                     
                     {/* PointCloud */}
-                    <Model file_path = {contextValue.pcdFilePath}/>
+                    <Model file_path = {contextValue.pcdData}/>
 
                     
                 </Suspense>
