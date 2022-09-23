@@ -6,13 +6,20 @@ import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader";
 import { Suspense } from "react";
 import { useRef } from "react";
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
-import { Mesh, Vector3 } from 'three';
+import { Mesh, Vector3, Points } from 'three';
+import { useContext } from "react";
+import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
+import { useLocal } from "./loader";
 
-const Model = () => {
-    const result = useLoader(PCDLoader, './sample.pcd')
-    // return <primitive object={result} />
-    result.material.size = 0.15;
-    // console.log(result)
+
+const Model = (props) => {
+    let result = useLocal(props.file_path);
+    if(result != null){
+        result.material.size = 0.15;
+    }else{
+        result = new Points();
+    }
+
     return (
         <Suspense fallback={null}>
           <primitive object={result} />
@@ -28,9 +35,8 @@ const Rig = ({ v = new Vector3() }) => {
   
 
 export default function PcdCanvas() {
-    // const controlRef = useRef();
     const deg2rad = deg => (deg * Math.PI) / 180.0;
-
+    const contextValue = useContext(PcdFilePropsContext);
     return (
         <div className="Canvas" style={{ width: '100vw', height: '100vh' }}>
             <Canvas
@@ -51,7 +57,7 @@ export default function PcdCanvas() {
                     <OrbitControls />
                     
                     {/* PointCloud */}
-                    <Model />
+                    <Model file_path = {contextValue.pcdFilePath}/>
 
                     
                 </Suspense>

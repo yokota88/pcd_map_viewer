@@ -7,11 +7,14 @@ import reportWebVitals from './reportWebVitals';
 import FileUploadUI from './FileUploadUI';
 import BasicTabs from './BasicTabs';
 import PcdCanvas from './PcdCanvas';
+import {PcdFilePropsProvider} from './components/providers/PcdFilePropsProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BasicTabs />
-    <PcdCanvas />
+    <PcdFilePropsProvider>
+      <BasicTabs />
+      <PcdCanvas />
+    </PcdFilePropsProvider>
     {/* <RangeSlider />
     <RangeSlider /> */}
     {/* <FileUploadUI /> */}

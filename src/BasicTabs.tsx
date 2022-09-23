@@ -57,8 +57,6 @@ export default function BasicTabs() {
       </Box>
       <TabPanel value={value} index={0}>
         <FileUploadUI name="PCD Map"/>
-        <FileUploadUI name="RAW Data"/>
-        <FileUploadUI name="VectorMap"/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         

@@ -2,22 +2,26 @@ import React, { useState, useRef } from 'react'
 import { useAsyncCallback } from 'react-async-hook'
 import Box from '@mui/material/Box'
 import CircularIntegration from './CircularIntegration';
+import { useContext } from "react";
+import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
 const initialState = {
   file: null,
 }
 
 const FileUploadUI = (props) => {
+  const {pcdFilePath, setPcdFilePath} = useContext(PcdFilePropsContext);
   const inputRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
   const [success, setSuccess] = useState(false)
 
   const uploadFile = async(file) => {
     if (!file) return
+    setPcdFilePath(file);
 
     /* アップロード処理に見立てた時間のかかる処理 */
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-    await sleep(5000)
+    // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+    // await sleep(5000)
 
     /* アップロード処理が成功したらフォームの状態を
        初期化してsuccessステートをtrueにする */
@@ -27,9 +31,7 @@ const FileUploadUI = (props) => {
 
   const onFileInputChange = async (event) => {
     const file = event.target.files[0]
-    console.log(file)
     await uploadFile(file)
-    console.log('Loaded')
   }
 
   const clickFileUploadButton = () => {
@@ -50,6 +52,7 @@ const FileUploadUI = (props) => {
       />
       <input
         hidden
+        accept="*.pcd"
         ref={inputRef}
         type="file"
         onChange={asyncEvent.execute}
