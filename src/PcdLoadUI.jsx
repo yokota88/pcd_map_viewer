@@ -5,27 +5,14 @@ import CircularIntegration from './CircularIntegration';
 import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
-// const initialState = {
-//   file: null,
-// }
-
 const PcdLoadUI = (props) => {
   const {pcdData, setPcdData} = useContext(PcdFilePropsContext);
   const inputRef = useRef(null)
-  // const [formState, setFormState] = useState(initialState)
   const [success, setSuccess] = useState(false)
 
   const uploadFile = async(file) => {
     if (!file) return
     setPcdData(file);
-
-    /* アップロード処理に見立てた時間のかかる処理 */
-    // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-    // await sleep(5000)
-
-    /* アップロード処理が成功したらフォームの状態を
-       初期化してsuccessステートをtrueにする */
-    // setFormState(initialState)
     setSuccess(true)
   }
 
@@ -42,7 +29,7 @@ const PcdLoadUI = (props) => {
   const asyncEvent = useAsyncCallback(onFileInputChange);
 
   return (
-    <Box sx={{marginTop: 0, display: 'inline-block'}}>
+    <Box sx={{marginTop: '0px', display: 'inline-block'}}>
       <CircularIntegration
         onClick={clickFileUploadButton}
         asyncEvent={asyncEvent}

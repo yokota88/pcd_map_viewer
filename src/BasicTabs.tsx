@@ -24,7 +24,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box component="div" sx={{ p: 0, height: 50}}>
+        <Box component="div" sx={{ p: 0, height: '70px'}}>
           <Typography component="span">{children}</Typography>
         </Box>
       )}
@@ -56,15 +56,13 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {/* <Box component="div" sx={{height:50}}> */}
           <PcdLoadUI name="PCD Map"/>
-        {/* </Box>       */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Height
+        {/* Height */}
         <RangeSlider />
       </TabPanel>
     </Box>
