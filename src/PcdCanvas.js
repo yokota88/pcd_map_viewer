@@ -1,16 +1,14 @@
 import "./styles.css";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useLoader } from "@react-three/fiber";
 import { Stats, OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
-import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader";
 import { Suspense } from "react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo ,memo, useCallback} from "react";
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
 import { Mesh, Vector3, Points } from 'three';
 import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
-// import { GridHelperContext } from "./components/providers/GridHelperProvider";
 import { usePCDLoader } from "./loader";
+
 
 const calcMinMax = (target) => {
     let i;
@@ -31,34 +29,36 @@ const calcGridProps = (range1, range2) => {
     const val1 = Math.abs(range1.min) + Math.abs(range1.max);
     const val2 = Math.abs(range2.min) + Math.abs(range2.max);
 
-    const range = Math.ceil(Math.max(val1, val2));
+    const range = Math.ceil(Math.max(val1, val2)/10)*10;
     const split_step = range/10;
 
-    console.log(val1,val2,Math.max(val1, val2),range,{range:range, split_step:split_step})
     return {range:range, split_step:split_step};
 } 
-
-const GridHelper = (props) => {
-    
-}
 
 const Rig = ({ v = new Vector3() }) => {
     return useFrame((state) => {
     //   console.log(state);
     })
   };
-  
 
 export default function PcdCanvas() {
     const deg2rad = deg => (deg * Math.PI) / 180.0;
-    const contextValue = useContext(PcdFilePropsContext);
-    // const gridHelperValue = useContext(GridHelperContext);
-    const [gridProps, setGridProps] = useState({range:100, split_step:10});
-    let range = 100;
-    let split_step = 10;
+    const pcdContext = useContext(PcdFilePropsContext);
 
-    const Model = (props) => {
-        let points = usePCDLoader(props.file_path);
+    // Load points from PCD
+    const load_points = usePCDLoader(pcdContext.pcdData);
+
+    // Applay properties
+    const points = useMemo(()=>{
+        if(load_points != null){
+            load_points.material.size = 0.15;
+        }
+        return load_points
+    },[load_points])
+
+    // Calcurate grid range
+    const grid_range = useMemo(() => {
+        let grid_range;
         if(points != null){
             const itemSize = points.geometry.attributes.position.itemSize;
             const points_x = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===0);
@@ -67,16 +67,19 @@ export default function PcdCanvas() {
             const range_x = calcMinMax(points_x);
             const range_y = calcMinMax(points_y);
             const range_z = calcMinMax(points_z);
-            // console.log(calcGridProps(range_x, range_y))
-            const gridProps = calcGridProps(range_x, range_y);
-            range = gridProps.range;
-            split_step = gridProps.split_step;
-            console.log(gridProps)
-            points.material.size = 0.15;
+            grid_range = calcGridProps(range_x, range_y);
         }else{
+            grid_range = {range:100, split_step:10};
+        }
+        console.log(grid_range);
+        return grid_range;
+    })
+    
+    const Model = ({points}) => {
+        if(points === null){
             points = new Points();
         }
-    
+        console.log(points)
         return (
             <Suspense fallback={null}>
               <primitive object={points} />
@@ -84,9 +87,7 @@ export default function PcdCanvas() {
           )
     };
 
-
-
-    console.log(range)
+    // Render
     return (
         <div className="Canvas" style={{ width: '100vw', height: '100vh' }}>
             <Canvas
@@ -100,6 +101,15 @@ export default function PcdCanvas() {
                 }}
                 dpr={window.devicePixelRatio}
 				shadows>
+                
+                <axesHelper args={[0.5]} />
+                <gridHelper 
+                    args = {[grid_range.range, grid_range.split_step]}//[100, 100]
+                    rotation = {[deg2rad(90), 0, 0]}
+                    position = {[0, 0, 0]} //[0, 0, 0]
+                    
+                />
+
                 <Rig />
                 <OrthographicCamera position={[0, 0, 5]} zoom={170} />
                 <Suspense fallback={null}>
@@ -107,27 +117,12 @@ export default function PcdCanvas() {
                     <OrbitControls />
                     
                     {/* PointCloud */}
-                    <Model file_path = {contextValue.pcdData}/>
+                    <Model points={points}/>
 
                     
                 </Suspense>
                 
                 {/* <Stats /> */}
-                <axesHelper args={[0.5]} />
-                <gridHelper 
-                    args = {[range, split_step]}//[100, 100]
-                    rotation = {[deg2rad(90), 0, 0]}
-                    position = {[0, 0, 0]} //[0, 0, 0]
-                    
-                />
-                {/* <GizmoHelper
-                    alignment="bottom-left" // widget alignment within scene
-                    margin={[80, 80]} // widget margins (X, Y)
-                    // onTarget={() => ref.current.lookAt}
-                    // onUpdate={() => ref.current.update()}
-                >
-                    <GizmoViewport axisColors={['#f00', '#398400', '#00f']} labelColor="#fff" />
-                </GizmoHelper> */}
             </Canvas>
         </div>
     );
