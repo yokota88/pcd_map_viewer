@@ -46,15 +46,15 @@ export default function PcdCanvas() {
     const pcdContext = useContext(PcdFilePropsContext);
 
     // Load points from PCD
-    const load_points = usePCDLoader(pcdContext.pcdData);
+    const points = usePCDLoader(pcdContext.pcdData);
 
-    // Applay properties
-    const points = useMemo(()=>{
-        if(load_points != null){
-            load_points.material.size = 0.15;
+    // Apply properties
+    useMemo(()=>{
+        if(points != null){
+            points.material.size = 0.15;
         }
-        return load_points
-    },[load_points])
+        return points
+    },[points])
 
     // Calcurate grid range
     const grid_range = useMemo(() => {
@@ -63,10 +63,10 @@ export default function PcdCanvas() {
             const itemSize = points.geometry.attributes.position.itemSize;
             const points_x = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===0);
             const points_y = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===1);
-            const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
+            // const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
             const range_x = calcMinMax(points_x);
             const range_y = calcMinMax(points_y);
-            const range_z = calcMinMax(points_z);
+            // const range_z = calcMinMax(points_z);
             grid_range = calcGridProps(range_x, range_y);
         }else{
             grid_range = {range:100, split_step:10};
@@ -75,11 +75,11 @@ export default function PcdCanvas() {
         return grid_range;
     })
     
-    const Model = ({points}) => {
+    // Retrun PCD map points
+    const MapPoints = ({points}) => {
         if(points === null){
             points = new Points();
         }
-        console.log(points)
         return (
             <Suspense fallback={null}>
               <primitive object={points} />
@@ -117,7 +117,7 @@ export default function PcdCanvas() {
                     <OrbitControls />
                     
                     {/* PointCloud */}
-                    <Model points={points}/>
+                    <MapPoints points={points}/>
 
                     
                 </Suspense>
