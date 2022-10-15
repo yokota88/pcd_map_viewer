@@ -6,13 +6,13 @@ import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
 const PcdLoadUI = (props) => {
-  const {pcdData, setPcdData} = useContext(PcdFilePropsContext);
+  const {pcdProps, setPcdProps} = useContext(PcdFilePropsContext);
   const inputRef = useRef(null)
   const [success, setSuccess] = useState(false)
 
   const uploadFile = async(file) => {
     if (!file) return
-    setPcdData(file);
+    setPcdProps({file:file, max_height:1, min_height:0});
     setSuccess(true)
   }
 

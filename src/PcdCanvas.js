@@ -1,13 +1,12 @@
-import "./styles.css";
+import { Suspense } from "react";
+import { useMemo, useContext} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stats, OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
-import { Suspense } from "react";
-import { useRef, useState, useEffect, useMemo ,memo, useCallback} from "react";
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
 import { Mesh, Vector3, Points } from 'three';
-import { useContext } from "react";
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 import { usePCDLoader } from "./loader";
+import "./styles.css";
 
 
 const calcMinMax = (target) => {
@@ -46,7 +45,7 @@ export default function PcdCanvas() {
     const pcdContext = useContext(PcdFilePropsContext);
 
     // Load points from PCD
-    const points = usePCDLoader(pcdContext.pcdData);
+    const points = usePCDLoader(pcdContext.pcdProps.file);
 
     // Apply properties
     useMemo(()=>{
@@ -63,15 +62,14 @@ export default function PcdCanvas() {
             const itemSize = points.geometry.attributes.position.itemSize;
             const points_x = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===0);
             const points_y = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===1);
-            // const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
+            const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
             const range_x = calcMinMax(points_x);
             const range_y = calcMinMax(points_y);
-            // const range_z = calcMinMax(points_z);
+            const range_z = calcMinMax(points_z);
             grid_range = calcGridProps(range_x, range_y);
         }else{
             grid_range = {range:100, split_step:10};
         }
-        console.log(grid_range);
         return grid_range;
     })
     

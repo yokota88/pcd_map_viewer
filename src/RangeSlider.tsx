@@ -1,10 +1,14 @@
 import * as React from 'react';
+import { useContext } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
+import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
 export default function RangeSlider() {
-  const [value, setValue] = React.useState<number[]>([10,15]);
+  const pcdContext = useContext(PcdFilePropsContext);
+  
+  const [value, setValue] = React.useState<number[]>([pcdContext.pcdProps.max_height, pcdContext.pcdProps.max_height]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
       setValue(newValue as number[]);
