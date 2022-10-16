@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { useMemo, useContext} from "react";
+import { useMemo, useContext, useCallback, useEffect} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stats, OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
@@ -42,10 +42,12 @@ const Rig = ({ v = new Vector3() }) => {
 
 export default function PcdCanvas() {
     const deg2rad = deg => (deg * Math.PI) / 180.0;
-    const pcdContext = useContext(PcdFilePropsContext);
+    const {pcdProps, setPcdProps} = useContext(PcdFilePropsContext);
 
     // Load points from PCD
-    const points = usePCDLoader(pcdContext.pcdProps.file);
+    const points = usePCDLoader(pcdProps.file);
+
+    // const points_filter = [...points];
 
     // Apply properties
     useMemo(()=>{
@@ -55,9 +57,19 @@ export default function PcdCanvas() {
         return points
     },[points])
 
-    // Calcurate grid range
-    const grid_range = useMemo(() => {
-        let grid_range;
+    // Filter by height range
+    useMemo(()=>{
+        if(points != null){
+            console.log('Chanege!!!!!!!!!!!!')
+            
+            points.material.size = 0.15;
+        }
+        return points
+    },[pcdProps.current_min_height, pcdProps.current_max_height])
+
+    // Calcurate points range
+    const range = useMemo(()=>{
+        let range;
         if(points != null){
             const itemSize = points.geometry.attributes.position.itemSize;
             const points_x = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===0);
@@ -66,12 +78,34 @@ export default function PcdCanvas() {
             const range_x = calcMinMax(points_x);
             const range_y = calcMinMax(points_y);
             const range_z = calcMinMax(points_z);
-            grid_range = calcGridProps(range_x, range_y);
+            range = {x:range_x, y:range_y, z:range_z};
+        }
+        return(range)
+    }, [points])
+
+    // Set PCD props
+    useEffect(() => {
+        if(points != null){
+            setPcdProps({
+                file:pcdProps.file,
+                min_height:range.z.min,
+                max_height:range.z.max,
+                current_min_height:range.z.min,
+                current_max_height:range.z.max            
+            });
+        }
+      },[range])
+
+    // Calcurate grid range
+    const grid_range = useMemo(() => {
+        let grid_range;
+        if(range != null){
+            grid_range = calcGridProps(range.x, range.y);
         }else{
             grid_range = {range:100, split_step:10};
         }
         return grid_range;
-    })
+    },[range])
     
     // Retrun PCD map points
     const MapPoints = ({points}) => {

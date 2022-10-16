@@ -12,7 +12,9 @@ const PcdLoadUI = (props) => {
 
   const uploadFile = async(file) => {
     if (!file) return
-    setPcdProps({file:file, max_height:1, min_height:0});
+    setPcdProps({file:file, max_height:1, min_height:0,
+      current_min_height:0,
+      current_max_height:1});
     setSuccess(true)
   }
 
