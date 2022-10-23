@@ -3,7 +3,7 @@ import { useMemo, useContext, useCallback, useEffect} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stats, OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import { PerspectiveCamera, OrthographicCamera } from '@react-three/drei'
-import { Mesh, Vector3, Points } from 'three';
+import { Mesh, Vector3, Points, BufferGeometry} from 'three';
 import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 import { usePCDLoader } from "./loader";
 import "./styles.css";
@@ -47,30 +47,41 @@ export default function PcdCanvas() {
     // Load points from PCD
     const points = usePCDLoader(pcdProps.file);
 
-    // const points_filter = [...points];
-
-    // Apply properties
-    useMemo(()=>{
-        if(points != null){
-            points.material.size = 0.15;
-        }
-        return points
-    },[points])
+    let points_filter = useMemo(()=>{
+        return points;
+    },[points, pcdProps.current_min_height, pcdProps.current_max_height]);
 
     // Filter by height range
     useMemo(()=>{
-        if(points != null){
+        if(points_filter != null){
             console.log('Chanege!!!!!!!!!!!!')
-            
-            points.material.size = 0.15;
+            // Filter
+            const itemSize = points.geometry.attributes.position.itemSize;
+            // const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
+            const points_filter_arr = [];
+            points.geometry.attributes.position.array.map(function(val, idx, array) {
+                if (pcdProps.current_min_height < val & val < pcdProps.current_max_height & idx%itemSize===2) {
+                    points_filter_arr.push(new Vector3(
+                    points.geometry.attributes.position.array[idx-2],
+                    points.geometry.attributes.position.array[idx-1],
+                    points.geometry.attributes.position.array[idx],
+                    ))
+                }
+            });
+
+            // Create new points geometry
+            const geometry = new BufferGeometry().setFromPoints(points_filter_arr);
+            points_filter = new Points(geometry, points.material);
+            points_filter.material.size = 0.15;
         }
-        return points
+        return points_filter
     },[pcdProps.current_min_height, pcdProps.current_max_height])
 
     // Calcurate points range
     const range = useMemo(()=>{
         let range;
         if(points != null){
+            console.log(points)
             const itemSize = points.geometry.attributes.position.itemSize;
             const points_x = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===0);
             const points_y = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===1);
@@ -149,7 +160,7 @@ export default function PcdCanvas() {
                     <OrbitControls />
                     
                     {/* PointCloud */}
-                    <MapPoints points={points}/>
+                    <MapPoints points={points_filter}/>
 
                     
                 </Suspense>
