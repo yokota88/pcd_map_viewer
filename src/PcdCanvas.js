@@ -58,6 +58,7 @@ export default function PcdCanvas() {
             // Filter
             const itemSize = points.geometry.attributes.position.itemSize;
             // const points_z = points.geometry.attributes.position.array.filter((val,idx)=>idx%itemSize===2);
+            // const points_filter_arr = new Array(new Vector3(points.geometry.attributes.position.array.length));
             const points_filter_arr = [];
             points.geometry.attributes.position.array.map(function(val, idx, array) {
                 if (pcdProps.current_min_height < val & val < pcdProps.current_max_height & idx%itemSize===2) {
