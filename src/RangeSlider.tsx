@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useContext, useState, useMemo } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import { PcdFilePropsContext, PcdInfo, defaultContext } from "./components/providers/PcdFilePropsProvider";
+import { PcdFilePropsContext } from "./components/providers/PcdFilePropsProvider";
 
 type tempSliderVal = {
   current_min: number;
