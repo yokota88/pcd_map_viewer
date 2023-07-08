@@ -31,7 +31,7 @@ const PcdLoadUI = (props) => {
   const asyncEvent = useAsyncCallback(onFileInputChange);
 
   return (
-    <Box sx={{marginTop: '0px', display: 'inline-block'}}>
+    <Box >
       <CircularIntegration
         onClick={clickFileUploadButton}
         asyncEvent={asyncEvent}

@@ -35,8 +35,8 @@ export default function RangeSlider() {
   const current_range_view = [Math.ceil(current_range[0]*10)/10, Math.ceil(current_range[1]*10)/10];
 
   return (
-    <Box component="div" sx={{ width: 250, padding: '10px'}}>
-      <Typography id="pcd-height-slider" gutterBottom>
+    <Box component="div" sx={{ width: 250, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start", padding:"0px", margin:"5px"}}>
+      <Typography id="pcd-height-slider" gutterBottom sx={{padding:"0px"}}>
         Height range[m]: {current_range_view[0]} 〜 {current_range_view[1]}
       </Typography>
       <Slider
@@ -48,6 +48,7 @@ export default function RangeSlider() {
         onChangeCommitted={onChangeCommitted}
         // valueLabelDisplay="auto"
         aria-labelledby="pcd-height-slider"
+        sx={{padding:"0px"}}
       />
     </Box>
   );
