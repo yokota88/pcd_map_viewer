@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/pcd_map_viewer/static/css/main.c0342619.css",
+    "main.js": "/pcd_map_viewer/static/js/main.470dace2.js",
+    "index.html": "/pcd_map_viewer/index.html",
+    "main.c0342619.css.map": "/pcd_map_viewer/static/css/main.c0342619.css.map",
+    "main.470dace2.js.map": "/pcd_map_viewer/static/js/main.470dace2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c0342619.css",
+    "static/js/main.470dace2.js"
+  ]
+}
